@@ -40,21 +40,21 @@ duration_df <- hourly_deduped %>%
   group_by(zip_code) %>%
   summarize(outage_hours = n(), .groups = "drop")
 
-# make each day actually be a 10-day lag, so day of interest + 9 days prior averaged
+# make each day actually be a 7-day lag, so day of interest + 6 days prior averaged
 duration_df <- duration_df %>%
   group_by(zip_code) %>%
   complete(date = seq(min(date), max(date), by = "day")) %>%
   mutate(outage_hours = replace_na(outage_hours, 0)) %>%
   arrange(zip_code, date) %>%
   mutate(
-    outage_hours_lag10 = slide_dbl(
+    outage_hours_lag7 = slide_dbl(
       outage_hours,
       sum,
-      .before = 8,
+      .before = 6,
       .complete = FALSE
     )
   ) %>%
   ungroup() %>% 
-  filter(outage_hours_lag10 > 0)
+  filter(outage_hours_lag7 > 0)
 
 write_csv(duration_df, paste0(clean_dir, 'ca_ZIP_daily_psps_no_washout_wf_classified_2013-2022_duration_exp.csv'))
