@@ -37,7 +37,7 @@ hourly_deduped <- hourly %>%
 # Collapse to daily counts
 duration_df <- hourly_deduped %>%
   mutate(date = as_date(hour)) %>%
-  group_by(zip_code) %>%
+  group_by(zip_code, date) %>%
   summarize(outage_hours = n(), .groups = "drop")
 
 # make each day actually be a 7-day lag, so day of interest + 6 days prior averaged
