@@ -50,7 +50,7 @@ duration_df <- duration_df %>%
     outage_hours_lag7 = slide_dbl(
       outage_hours,
       sum,
-      .before = 8,
+      .before = 6,
       .complete = FALSE
     )
   ) %>%
